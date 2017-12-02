@@ -99,6 +99,10 @@ function onLoad(save_state)
 end
 
 function start()
+  if #getSeatedPlayers() < 5 or #getSeatedPlayers() > 10 then
+    broadcastToAll("Invalid number of players, must be from 5 to 10", { r = 1, g = 0, b = 0 })
+    return
+  end
   deal()
   track()
   cards()
