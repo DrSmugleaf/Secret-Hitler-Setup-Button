@@ -78,15 +78,17 @@ hitlers = {
   "1c19bd"
 }
 
-self.createButton({
-  click_function = "start",
-  function_owner = self,
-  label = "Start",
-  position = { x = 0, y = 0.08, z = 0 },
-  width = 500,
-  height = 500,
-  font_size = 200
-})
+function onLoad(save_state)
+  self.createButton({
+    click_function = "start",
+    function_owner = self,
+    label = "Start",
+    position = { x = 0, y = 0.3, z = 0 },
+    width = 500,
+    height = 500,
+    font_size = 200
+  })
+end
 
 function start()
   deal()
