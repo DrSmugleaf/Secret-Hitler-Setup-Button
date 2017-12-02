@@ -79,6 +79,14 @@ hitlers = {
 }
 
 function onLoad(save_state)
+  self.setLock(true)
+
+  local position = self.getPosition()
+  position.y = 0
+  self.setPosition(position)
+
+  self.setRotation({ x = 180, y = 0, z = 180 })
+
   self.createButton({
     click_function = "start",
     function_owner = self,
