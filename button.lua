@@ -1,7 +1,7 @@
 emptyBox = "958654"
 
 boxGUIDS = {
-  "4599b3", nil, nil, nil,
+  nil, nil, nil, nil,
   "93913b",
   "4599b3",
   "d8e506",
@@ -11,7 +11,7 @@ boxGUIDS = {
 }
 
 tracks = {
-  "1ec9a4", nil, nil, nil,
+  nil, nil, nil, nil,
   "9c1387",
   "9c1387",
   "1ec9a4",
