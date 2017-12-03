@@ -178,15 +178,12 @@ end
 function track()
   players = #getSeatedPlayers()
   track = tracks[players]
+  if DEBUG then track = tracks[5] end
   trackPosition = getObjectFromGUID(tracks[5]).getPosition()
 
   deleteTracks(track)
 
-  if DEBUG then
-    track = getObjectFromGUID(tracks[5])
-  else
-    track = getObjectFromGUID(track)
-  end
+  track = getObjectFromGUID(track)
   track.setPosition(trackPosition)
   track.setLock(true)
 end
