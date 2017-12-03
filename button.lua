@@ -1,3 +1,5 @@
+DEBUG = false
+
 emptyBox = "958654"
 
 boxGUIDS = {
@@ -99,7 +101,7 @@ function onLoad(save_state)
 end
 
 function start()
-  if #getSeatedPlayers() < 5 or #getSeatedPlayers() > 10 then
+  if not DEBUG and (#getSeatedPlayers() < 5 or #getSeatedPlayers() > 10) then
     broadcastToAll("Invalid number of players, must be from 5 to 10", { r = 1, g = 0, b = 0 })
     return
   end
@@ -111,8 +113,13 @@ end
 
 function deal()
   players = #getSeatedPlayers()
-  box = boxGUIDS[players]
-  box = getObjectFromGUID(box)
+  if not DEBUG then
+    box = boxGUIDS[players]
+    box = getObjectFromGUID(box)
+  else
+    box = boxGUIDS[5]
+    box = getObjectFromGUID(box)
+  end
   box.shuffle()
   box.deal(1)
 
@@ -157,6 +164,7 @@ function deleteEnvelopes(p)
   end
 
   local liberalPlayers, fascistPlayers, hitler = sortRoles(p.envelopes)
+  if DEBUG then hitler = Player.White end
   for _, v in pairs(liberalPlayers) do
     v.broadcast("You don't know who anyone is", { r = 0.5, g = 0.5, b = 1 })
     v.broadcast("You are a Liberal", { r = 0.5, g = 0.5, b = 1 })
@@ -225,7 +233,11 @@ function track()
 
   deleteTracks(track)
 
-  track = getObjectFromGUID(track)
+  if DEBUG then
+    track = getObjectFromGUID(tracks[5])
+  else
+    track = getObjectFromGUID(track)
+  end
   track.setPosition(trackPosition)
   track.setLock(true)
 end
