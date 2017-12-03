@@ -26,60 +26,6 @@ liberalCards = "c95169"
 fascistCards = "50c5b6"
 deck = "c95169"
 
-liberals = {
-  "6ff0f3",
-  "f563fa",
-  "9fb888",
-  "84b8a6",
-  "4a73ed",
-  "106af2",
-  "19d37d",
-  "5604ad",
-  "eba99f",
-  "a869b8",
-  "36a4d6",
-  "9de630",
-  "0448be",
-  "1bb26f",
-  "25a803",
-  "842cfd",
-  "27cab0",
-  "ae07c1",
-  "da77c2",
-  "db16cf",
-  "e2589e",
-  "bc2dfb",
-  "fac883",
-  "19be92",
-  "1117a5",
-  "d1a5ad",
-  "0cd95b"
-}
-
-fascists = {
-  "291868",
-  "c34eb5",
-  "3a73e9",
-  "a03e21",
-  "832171",
-  "c27cb3",
-  "1a6948",
-  "2c0b23",
-  "d640cb",
-  "c888ce",
-  "371adc",
-  "8a5969"
-}
-
-hitlers = {
-  "67b490",
-  "1cca9d",
-  "a6e616",
-  "66f78a",
-  "c278c6",
-  "1c19bd"
-}
-
 function onLoad(save_state)
   self.setLock(true)
 
@@ -187,31 +133,34 @@ function sortRoles(envelopeTable)
   local fascistPlayers = {}
   local hitler = nil
 
-  for k, v in pairs(envelopeTable) do
-    local party = getParty(v)
-    if party == "liberal" then
-      table.insert(liberalPlayers, Player[k])
-    elseif party == "fascist" then
-      table.insert(fascistPlayers, Player[k])
-    else
-      hitler = Player[k]
-    end
+  for k, v in pairs(getSeatedPlayers()) do
+    local player = Player[v]
+    local role = getPlayerRole(player)
+    if role == "Liberal" then table.insert(liberalPlayers, player) end
+    if role == "Fascist" then table.insert(fascistPlayers, player) end
+    if role == "Hitler" then hitler = player end
   end
 
   return liberalPlayers, fascistPlayers, hitler
 end
 
-function getParty(envelope)
-  for _, v in pairs(hitlers) do
-    if v == envelope.guid then return "hitler" end
-  end
+function getPlayerRole(player)
+  local role = getRole(player)
+  if role == "Hitler" then return role end
+  return getFaction(player)
+end
 
-  for _, v in pairs(fascists) do
-    if v == envelope.guid then return "fascist" end
+function getFaction(player)
+  for _, v in pairs(player.getHandObjects()) do
+    local category = v.getVar("category")
+    if category == "Membership Card" then return v.getVar("faction") end
   end
+end
 
-  for _, v in pairs(liberals) do
-    if v == envelope.guid then return "liberal" end
+function getRole(player)
+  for _, v in pairs(player.getHandObjects()) do
+    local category = v.getVar("category")
+    if category == "Role Card" then return v.getVar("role") end
   end
 end
 
