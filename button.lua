@@ -69,19 +69,8 @@ function deal()
   box.shuffle()
   box.deal(1)
 
-  Timer.create({
-    identifier = "deleteBoxes",
-    function_name = "deleteBoxes",
-    function_owner = self,
-    delay = 0.5
-  })
-
-  Timer.create({
-    identifier = "openEnvelopes",
-    function_name = "openEnvelopes",
-    function_owner = self,
-    delay = 0.5
-  })
+  Wait.time(deleteBoxes, 0.5)
+  Wait.time(openEnvelopes, 0.5)
 end
 
 function openEnvelopes()
@@ -95,21 +84,15 @@ function openEnvelopes()
     end
   end
 
-  Timer.create({
-    identifier = "deleteEnvelopes",
-    function_name = "deleteEnvelopes",
-    function_owner = self,
-    parameters = { envelopes = envelopes },
-    delay = 0.5
-  })
+  Wait.time(function() deleteEnvelopes(envelopes) end, 0.5)
 end
 
-function deleteEnvelopes(p)
-  for k, v in pairs(p.envelopes) do
+function deleteEnvelopes(envelopes)
+  for k, v in pairs(envelopes) do
     v.destruct()
   end
 
-  local liberalPlayers, fascistPlayers, hitler = sortRoles(p.envelopes)
+  local liberalPlayers, fascistPlayers, hitler = sortRoles(envelopes)
   if DEBUG then hitler = Player.White end
   for _, v in pairs(liberalPlayers) do
     v.broadcast("You don't know who anyone is", { r = 0.5, g = 0.5, b = 1 })
@@ -166,7 +149,7 @@ end
 
 function deleteBoxes()
   for i = 1, 10 do
-    if not (boxGUIDS[i] == nil) then
+    if boxGUIDS[i] then
       local box = getObjectFromGUID(boxGUIDS[i])
       box.destruct()
     end
@@ -190,7 +173,7 @@ end
 
 function deleteTracks(except)
   for i = 1, 10 do
-    if not (tracks[i] == nil) and not (tracks[i] == except) then
+    if tracks[i] and not (tracks[i] == except) then
       local track = getObjectFromGUID(tracks[i])
       track.destruct()
     end
@@ -205,15 +188,5 @@ function joinCards()
   local liberalCards = getObjectFromGUID(liberalCards)
   local fascistCards = getObjectFromGUID(fascistCards)
   fascistCards.setPosition(liberalCards.getPosition())
-  Timer.create({
-    identifier = "shuffleCards",
-    function_name = "shuffleCards",
-    function_owner = self,
-    delay = 3
-  })
-end
-
-function shuffleCards()
-  local deck = getObjectFromGUID(deck)
-  deck.shuffle()
+  Wait.time(function() getObjectFromGUID(deck).shuffle() end, 3)
 end
