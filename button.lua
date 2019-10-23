@@ -26,6 +26,9 @@ liberalCards = "c95169"
 fascistCards = "50c5b6"
 deck = "c95169"
 
+Color.add('Fascist', Color(1, 0.5, 0.5))
+Color.add('Liberal', Color(0.5, 0.5, 1))
+
 function onLoad(save_state)
   self.setLock(true)
 
@@ -48,7 +51,7 @@ end
 
 function start()
   if not DEBUG and (#getSeatedPlayers() < 5 or #getSeatedPlayers() > 10) then
-    broadcastToAll("Invalid number of players, must be from 5 to 10", { r = 1, g = 0, b = 0 })
+    broadcastToAll("Invalid number of players, must be from 5 to 10", Color.Red)
     return
   end
   deal()
@@ -95,20 +98,20 @@ function deleteEnvelopes(envelopes)
   local liberalPlayers, fascistPlayers, hitler = sortRoles(envelopes)
   if DEBUG then hitler = Player.White end
   for _, v in pairs(liberalPlayers) do
-    v.broadcast("You don't know who anyone is", { r = 0.5, g = 0.5, b = 1 })
-    v.broadcast("You are a Liberal", { r = 0.5, g = 0.5, b = 1 })
+    v.broadcast("You don't know who anyone is", Color.Liberal)
+    v.broadcast("You are a Liberal", Color.Liberal)
   end
   for _, v in pairs(fascistPlayers) do
-    v.broadcast("Hitler is " .. hitler.color .. ": " .. hitler.steam_name, { r = 1, g = 0.5, b = 0.5 })
-    v.broadcast("You are a Fascist", { r = 1, g = 0.5, b = 0.5 })
+    v.broadcast("Hitler is " .. hitler.color .. ": " .. hitler.steam_name, Color.Fascist)
+    v.broadcast("You are a Fascist", Color.Fascist)
   end
   if #getSeatedPlayers() == 5 or #getSeatedPlayers() == 6 then
     local fascistAlly = fascistPlayers[1]
-    hitler.broadcast("Your fascist ally is " .. fascistAlly.color .. ": " .. fascistAlly.steam_name, { r = 1, g = 0.5, b = 0.5 })
+    hitler.broadcast("Your fascist ally is " .. fascistAlly.color .. ": " .. fascistAlly.steam_name, Color.Fascist)
   else
-    hitler.broadcast("You don't know who your allies are", { r = 1, g = 0.5, b = 0.5 })
+    hitler.broadcast("You don't know who your allies are", Color.Fascist)
   end
-  hitler.broadcast("You are Hitler", { r = 1, g = 0.5, b = 0.5 })
+  hitler.broadcast("You are Hitler", Color.Fascist)
 end
 
 function sortRoles(envelopeTable)
