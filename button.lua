@@ -26,8 +26,8 @@ liberalCards = "c95169"
 fascistCards = "50c5b6"
 deck = "c95169"
 
-Color.add('Fascist', Color(1, 0.5, 0.5))
-Color.add('Liberal', Color(0.5, 0.5, 1))
+Color.Fascist = {1, 0.5, 0.5}
+Color.Liberal = {0.5, 0.5, 1}
 
 function onLoad(save_state)
   self.setLock(true)
